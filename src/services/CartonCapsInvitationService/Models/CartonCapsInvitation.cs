@@ -15,7 +15,7 @@ public class CartonCapsInvitation
     public int? AcceptedAccountID { get; set; }
     public string? ReferralURL { get; set; }
 
-    public static CartonCapsInvitation fromDbModel(Invitation invitation)
+    public static CartonCapsInvitation fromEntityModel(InvitationEntity invitation)
     {
         return new CartonCapsInvitation
         {

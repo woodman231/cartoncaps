@@ -9,18 +9,18 @@ public class CartonCapsEFDbContext : DbContext
     {
     }
 
-    public DbSet<Account> Accounts { get; set; }
-    public DbSet<Invitation> Invitations { get; set; }
+    public DbSet<AccountEntity> Accounts { get; set; }
+    public DbSet<InvitationEntity> Invitations { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Invitation>()
+        modelBuilder.Entity<InvitationEntity>()
             .HasOne(i => i.SourceAccount)
             .WithMany(a => a.InvitationsSent)
             .HasForeignKey(i => i.SenderAccountID)
             .OnDelete(DeleteBehavior.Restrict);
 
-        modelBuilder.Entity<Invitation>()
+        modelBuilder.Entity<InvitationEntity>()
             .HasOne(i => i.AcceptedAccount)
             .WithMany(a => a.InvitationsAccepted)
             .HasForeignKey(i => i.AcceptedAccountID)

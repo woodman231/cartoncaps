@@ -38,7 +38,7 @@ namespace CartonCapsDbContext.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Accounts");
+                    b.ToTable("Accounts", (string)null);
                 });
 
             modelBuilder.Entity("CartonCapsDbContext.Models.Invitation", b =>
@@ -79,7 +79,7 @@ namespace CartonCapsDbContext.Migrations
 
                     b.HasIndex("SenderAccountID");
 
-                    b.ToTable("Invitations");
+                    b.ToTable("Invitations", (string)null);
                 });
 
             modelBuilder.Entity("CartonCapsDbContext.Models.Invitation", b =>

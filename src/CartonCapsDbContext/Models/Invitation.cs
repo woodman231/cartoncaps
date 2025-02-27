@@ -2,7 +2,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CartonCapsDbContext.Models
 {
-    public class Invitation
+    [Table("Invitations")]
+    public class InvitationEntity
     {
         public int ID { get; set; }
         public int SenderAccountID { get; set; }
@@ -15,9 +16,9 @@ namespace CartonCapsDbContext.Models
         public int? AcceptedAccountID { get; set; }
 
         [ForeignKey("SenderAccountID")]
-        public Account? SourceAccount { get; set; }
+        public AccountEntity? SourceAccount { get; set; }
 
         [ForeignKey("AcceptedAccountID")]
-        public Account? AcceptedAccount { get; set; }
+        public AccountEntity? AcceptedAccount { get; set; }
     }
 }

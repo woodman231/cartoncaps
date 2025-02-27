@@ -13,7 +13,7 @@ public class CartonCapsInvitationEFRepository : ICartonCapsInvitationRepository
         _dbContext = dbContext;        
     }
 
-    public async Task<Invitation> CreateCartonCapsInvitationAsync(Invitation cartonCapsInvitation)
+    public async Task<InvitationEntity> CreateCartonCapsInvitationAsync(InvitationEntity cartonCapsInvitation)
     {
         var result = await _dbContext.Invitations.AddAsync(cartonCapsInvitation);
         await _dbContext.SaveChangesAsync();
@@ -30,14 +30,14 @@ public class CartonCapsInvitationEFRepository : ICartonCapsInvitationRepository
         }
     }
 
-    public async Task<Invitation?> GetCartonCapsInvitationAsync(int id)
+    public async Task<InvitationEntity?> GetCartonCapsInvitationAsync(int id)
     {
         return await _dbContext.Invitations.FindAsync(id);
     }
 
-    public async Task<IEnumerable<Invitation>> GetCartonCapsInvitationsAsync(GetCartonCapsInvitationsAsyncInput input)
+    public async Task<IEnumerable<InvitationEntity>> GetCartonCapsInvitationsAsync(GetCartonCapsInvitationsAsyncInput input)
     {
-        IQueryable<Invitation> query = _dbContext.Invitations;
+        IQueryable<InvitationEntity> query = _dbContext.Invitations;
         
         if (input.AccountID.HasValue)
         {
@@ -57,7 +57,7 @@ public class CartonCapsInvitationEFRepository : ICartonCapsInvitationRepository
         return await query.ToListAsync();
     }
 
-    public async Task<Invitation?> UpdateCartonCapsInvitationAsync(Invitation cartonCapsInvitation)
+    public async Task<InvitationEntity?> UpdateCartonCapsInvitationAsync(InvitationEntity cartonCapsInvitation)
     {
         var invitation = await _dbContext.Invitations.FindAsync(cartonCapsInvitation.ID);
         if (invitation != null)

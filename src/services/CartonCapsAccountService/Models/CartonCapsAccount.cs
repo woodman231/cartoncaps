@@ -8,7 +8,7 @@ public class CartonCapsAccount
     public string? Email { get; set; }
     public string? ReferralCode { get; set; }
 
-    public static CartonCapsAccount fromDbModel(Account dbModel)
+    public static CartonCapsAccount fromEntityModel(AccountEntity dbModel)
     {
         return new CartonCapsAccount
         {

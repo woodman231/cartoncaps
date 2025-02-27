@@ -1,12 +1,15 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace CartonCapsDbContext.Models
 {
-    public class Account
+    [Table("Accounts")]
+    public class AccountEntity
     {
         public int ID { get; set; }        
         public string? Email { get; set; }
         public string? ReferralCode { get; set; }
 
-        public List<Invitation>? InvitationsSent { get; set; }
-        public List<Invitation>? InvitationsAccepted { get; set; }
+        public List<InvitationEntity>? InvitationsSent { get; set; }
+        public List<InvitationEntity>? InvitationsAccepted { get; set; }
     }
 }

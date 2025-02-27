@@ -12,24 +12,24 @@ public class CartonCapsAccountEFRepository : ICartonCapsAccountRepository
         _dbContext = DbContext;
     }
 
-    public async Task<Account?> GetAccountByEmailAsync(string email)
+    public async Task<AccountEntity?> GetAccountByEmailAsync(string email)
     {
         return await _dbContext.Accounts.FirstOrDefaultAsync(a => a.Email == email);
     }
 
-    public async Task<Account?> GetAccountByReferralCodeAsync(string referralCode)
+    public async Task<AccountEntity?> GetAccountByReferralCodeAsync(string referralCode)
     {
         return await _dbContext.Accounts.FirstOrDefaultAsync(a => a.ReferralCode == referralCode);
     }
 
-    public async Task<Account?> GetAccountByIDAsync(int id)
+    public async Task<AccountEntity?> GetAccountByIDAsync(int id)
     {
         return await _dbContext.Accounts.FirstOrDefaultAsync(a => a.ID == id);
     }
 
-    public async Task<Account?> CreateAccountAsync(string email, string referralCode)
+    public async Task<AccountEntity?> CreateAccountAsync(string email, string referralCode)
     {
-        var account = new Account
+        var account = new AccountEntity
         {
             Email = email,
             ReferralCode = referralCode
@@ -41,7 +41,7 @@ public class CartonCapsAccountEFRepository : ICartonCapsAccountRepository
         return account;
     }
 
-    public async Task<Account?> UpdateAccountAsync(int id, string email, string referralCode)
+    public async Task<AccountEntity?> UpdateAccountAsync(int id, string email, string referralCode)
     {
         var account = await _dbContext.Accounts.FirstOrDefaultAsync(a => a.ID == id);
 
@@ -69,9 +69,9 @@ public class CartonCapsAccountEFRepository : ICartonCapsAccountRepository
         }
     }
 
-    public async Task<IEnumerable<Account>> GetAccountsAsync(string? email, string? referralCode)
+    public async Task<IEnumerable<AccountEntity>> GetAccountsAsync(string? email, string? referralCode)
     {
-        IQueryable<Account> query = _dbContext.Accounts;
+        IQueryable<AccountEntity> query = _dbContext.Accounts;
 
         if (!string.IsNullOrEmpty(email))
         {

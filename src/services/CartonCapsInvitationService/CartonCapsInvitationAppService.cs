@@ -57,7 +57,7 @@ public class CartonCapsInvitationAppService : ICartonCapsInvitationService
             return null;
         }
 
-        return CartonCapsInvitation.fromDbModel(updatedDbModel);
+        return CartonCapsInvitation.fromEntityModel(updatedDbModel);
     }
 
     public async Task<CartonCapsInvitation> CreateInvitationAsync(CreateInvitationAsyncInput input)
@@ -115,7 +115,7 @@ public class CartonCapsInvitationAppService : ICartonCapsInvitationService
         }
 
         // Create the invitation
-        Invitation invitation = new Invitation
+        InvitationEntity invitation = new InvitationEntity
         {
             SenderAccountID = input.SenderAccountID,
             SenderReferralCode = input.SenderReferralCode,
@@ -126,7 +126,7 @@ public class CartonCapsInvitationAppService : ICartonCapsInvitationService
         };
 
         var dbModel = await _cartonCapsInvitationRepository.CreateCartonCapsInvitationAsync(invitation);
-        var serviceModel = CartonCapsInvitation.fromDbModel(dbModel);
+        var serviceModel = CartonCapsInvitation.fromEntityModel(dbModel);
         serviceModel.ReferralURL = $"https://cartoncaps.com/register?referralCode={serviceModel.SenderReferralCode}";
 
         return serviceModel;
@@ -146,7 +146,7 @@ public class CartonCapsInvitationAppService : ICartonCapsInvitationService
             return null;
         }
 
-        return CartonCapsInvitation.fromDbModel(dbModel);
+        return CartonCapsInvitation.fromEntityModel(dbModel);
     }
 
     public async Task<List<CartonCapsInvitation>> GetInvitationsAsync(GetCartonCapsServiceRepositoryInput input)
@@ -160,6 +160,6 @@ public class CartonCapsInvitationAppService : ICartonCapsInvitationService
 
         var dbModels = await _cartonCapsInvitationRepository.GetCartonCapsInvitationsAsync(repositoryInput);
 
-        return dbModels.Select(CartonCapsInvitation.fromDbModel).ToList();
+        return dbModels.Select(CartonCapsInvitation.fromEntityModel).ToList();
     }    
 }

@@ -44,7 +44,7 @@ public class CartonCapsAccountAppService : ICartonCapsAccountService
         // If the account was succesfully created, then return it
         if (dbAccount != null)
         {
-            return CartonCapsAccount.fromDbModel(dbAccount);
+            return CartonCapsAccount.fromEntityModel(dbAccount);
         }
 
         return null;
@@ -60,7 +60,7 @@ public class CartonCapsAccountAppService : ICartonCapsAccountService
         var dbAccount = await _repository.GetAccountByEmailAsync(email);
         if (dbAccount != null)
         {
-            return CartonCapsAccount.fromDbModel(dbAccount);
+            return CartonCapsAccount.fromEntityModel(dbAccount);
         }
 
         return null;
@@ -71,7 +71,7 @@ public class CartonCapsAccountAppService : ICartonCapsAccountService
         var dbAccount = await _repository.GetAccountByIDAsync(id);
         if (dbAccount != null)
         {
-            return CartonCapsAccount.fromDbModel(dbAccount);
+            return CartonCapsAccount.fromEntityModel(dbAccount);
         }
 
         return null;        
@@ -82,7 +82,7 @@ public class CartonCapsAccountAppService : ICartonCapsAccountService
         var dbAccount = await _repository.GetAccountByReferralCodeAsync(referralCode);
         if (dbAccount != null)
         {
-            return CartonCapsAccount.fromDbModel(dbAccount);
+            return CartonCapsAccount.fromEntityModel(dbAccount);
         }
 
         return null;
@@ -92,6 +92,6 @@ public class CartonCapsAccountAppService : ICartonCapsAccountService
     {
         var accountsInDb = await _repository.GetAccountsAsync(input.EmailAddress, input.ReferralCode);
         
-        return accountsInDb.Select(CartonCapsAccount.fromDbModel);
+        return accountsInDb.Select(CartonCapsAccount.fromEntityModel);
     }
 }
