@@ -1,0 +1,392 @@
+openapi: 3.0.4
+info:
+  title: Carton Caps OpenAPI Specification
+  version: 1.0.0
+  description: Carton Caps OpenAPI Specification
+  contact:
+    name: Carton Caps
+    email: seanwoodward@seanwoodwardweb.com
+    url: https://cartoncaps.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+servers:
+  - url: https://api.cartoncaps.com
+    description: Production Server
+  - url: https://api.cartoncaps.com/staging
+    description: Staging Server
+  - url: http://localhost:3000
+    description: Local Development Server
+tags:
+  - name: Accounts
+    description: Account management
+  - name: Invitations
+    description: Invitation management
+components:
+  schemas:
+    Account:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Unique identifier for the account
+        email:
+          type: string
+          format: email
+          description: Email address for account
+        referralCode:
+          type: string
+          format: password
+          description: Referral code for account. Automatically generated upon account creation.
+      required:
+        - email
+    Invitation:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Unique identifier for the invitation
+        accountID:
+          type: integer
+          format: int64
+          description: ID of the account that sent the invitation
+        email:
+          type: string
+          format: email
+          description: Email address of the invitee
+        invitedAt:
+          type: string
+          format: date-time
+          description: Date and time the invitation was sent
+        acceptedAt:
+          type: string
+          format: date-time
+          nullable: true
+          description: Date and time the invitation was accepted
+        acceptedAccountID:
+          type: integer
+          format: int64
+          nullable: true
+          description: ID of the account that accepted the invitation
+        status:
+          type: string
+          enum:
+            - pending
+            - complete            
+      required:
+        - accountID
+        - email
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: Error code
+        message:
+          type: string
+          description: Error message
+paths:
+  /accounts:
+    get:
+      tags:
+        - Accounts
+      summary: Get all accounts or filter by email or referral code
+      description: Returns a list of accounts. Can be filtered by email or referral code.
+      operationId: getAccounts
+      parameters:
+        - name: email
+          in: query
+          required: false
+          description: Filter by email
+          schema:
+            type: string
+            format: email
+        - name: referralCode
+          in: query
+          required: false
+          description: Filter by referral code
+          schema:
+            type: string            
+      responses:
+        '200':
+          description: A list of accounts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags:
+        - Accounts
+      summary: Create an account
+      operationId: createAccount
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Account'
+        description: Account to create
+      responses:
+        '200':
+          description: Account created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /accounts/{accountID}:
+    get:
+      tags:
+        - Accounts
+      summary: Get an account by ID
+      operationId: getAccount
+      parameters:
+        - name: accountID
+          in: path
+          required: true
+          description: ID of the account to get
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Account found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '404':
+          description: Account not found
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      tags:
+        - Accounts
+      summary: Update an account by ID
+      operationId: updateAccount
+      parameters:
+        - name: accountID
+          in: path
+          required: true
+          description: ID of the account to update
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Account'
+        description: Account to update
+      responses:
+        '200':
+          description: Account updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '404':
+          description: Account not found
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - Accounts
+      summary: Delete an account by ID
+      operationId: deleteAccount
+      parameters:
+        - name: accountID
+          in: path
+          required: true
+          description: ID of the account
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Account deleted
+        '404':
+          description: Account not found  
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /invitations:
+    get:
+      tags:
+        - Invitations
+      summary: Get all invitations or filter by email or status
+      description: Returns a list of invitations. Can be filtered by email or status.
+      operationId: getInvitations
+      parameters:
+        - name: email
+          in: query
+          required: false
+          description: Filter by email
+          schema:
+            type: string
+            format: email
+        - name: status
+          in: query
+          required: false
+          description: Filter by status
+          schema:
+            type: string
+            enum:
+              - pending
+              - complete
+      responses:
+        '200':
+          description: A list of invitations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Invitation'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags:
+        - Invitations
+      summary: Create an invitation
+      operationId: createInvitation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Invitation'
+        description: Invitation to create
+      responses:
+        '200':
+          description: Invitation created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invitation'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /invitations/{invitationID}:
+    get:
+      tags:
+        - Invitations
+      summary: Get an invitation by ID
+      operationId: getInvitation
+      parameters:
+        - name: invitationID
+          in: path
+          required: true
+          description: ID of the invitation to get
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Invitation found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invitation'
+        '404':
+          description: Invitation not found
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      tags:
+        - Invitations
+      summary: Update an invitation by ID
+      operationId: updateInvitation
+      parameters:
+        - name: invitationID
+          in: path
+          required: true
+          description: ID of the invitation to update
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Invitation'
+        description: Invitation to update
+      responses:
+        '200':
+          description: Invitation updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invitation'
+        '404':
+          description: Invitation not found
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - Invitations
+      summary: Delete an invitation by ID
+      operationId: deleteInvitation
+      parameters:
+        - name: invitationID
+          in: path
+          required: true
+          description: ID of the invitation
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Invitation deleted
+        '404':
+          description: Invitation not found
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
